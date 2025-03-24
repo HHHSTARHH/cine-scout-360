@@ -16,9 +16,12 @@ interface RecommendationParams {
   prompt?: string;
 }
 
-// Create axios instance with the correct base URL
+// Create axios instance with the correct base URL and configuration
 const aiClient = axios.create({
   baseURL: 'https://generativelanguage.googleapis.com/v1beta',
+  headers: {
+    'Content-Type': 'application/json',
+  },
   params: {
     key: GEMINI_API_KEY,
   },
@@ -45,8 +48,8 @@ export const aiService = {
       
       prompt += '. For each movie, provide the title, year, director, a brief description, and why someone would enjoy it. Format as JSON with fields: title, year, director, description, and reason.';
 
-      // Using the correct endpoint structure
-      const response = await aiClient.post('models/gemini-pro:generateContent', {
+      // Using the correct endpoint and request structure for Gemini API
+      const response = await aiClient.post('/models/gemini-pro:generateContent', {
         contents: [
           {
             parts: [
@@ -90,7 +93,7 @@ export const aiService = {
       const prompt = `I'm feeling ${emotion}. Recommend 5 movies that would be perfect to watch when feeling this way. For each movie, provide the title, year, a brief description, and why it's good for this emotion. Format as JSON with fields: title, year, description, and emotionReason.`;
       
       // Using the correct endpoint structure
-      const response = await aiClient.post('models/gemini-pro:generateContent', {
+      const response = await aiClient.post('/models/gemini-pro:generateContent', {
         contents: [
           {
             parts: [
@@ -135,7 +138,7 @@ export const aiService = {
       const prompt = `Find movies that have a scene matching this description: "${sceneDescription}". For each matching movie, provide the title, year, a brief description of the scene, and how it relates to the movie as a whole. Format as JSON with fields: title, year, sceneDescription, and movieContext.`;
       
       // Using the correct endpoint structure
-      const response = await aiClient.post('models/gemini-pro:generateContent', {
+      const response = await aiClient.post('/models/gemini-pro:generateContent', {
         contents: [
           {
             parts: [
@@ -180,7 +183,7 @@ export const aiService = {
       const prompt = `USER QUESTION ABOUT MOVIES: ${userMessage}\n\nRespond conversationally as a friendly, knowledgeable movie expert. If they're asking for recommendations, suggest specific titles. If they're asking about movie facts, provide accurate information. Keep your answer focused on movies and related topics.`;
       
       // Using the correct endpoint structure
-      const response = await aiClient.post('models/gemini-pro:generateContent', {
+      const response = await aiClient.post('/models/gemini-pro:generateContent', {
         contents: [
           {
             parts: [
