@@ -2,7 +2,7 @@
 // This service will handle AI recommendations using the Gemini API
 import axios from 'axios';
 
-const GEMINI_API_KEY = 'AIzaSyAZuznK9VLpkhc0qQ0HxCMf0irryi3uc3Y';
+const GEMINI_API_KEY = 'AIzaSyAp_yEr9tolye093YPK934q8rTn6E2uMKY';
 const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
 
 // Type definitions
