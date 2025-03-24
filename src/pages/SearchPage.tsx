@@ -7,7 +7,7 @@ import MovieCard from '../components/MovieCard';
 import SearchBar from '../components/SearchBar';
 import AIRecommendations from '../components/AIRecommendations';
 import tmdbAPI from '../services/api';
-import { List, Grid, Filter, ArrowUpDown, Search } from 'lucide-react';
+import { List, Grid, Filter, ArrowUpDown, Search, Star, Film } from 'lucide-react';
 
 const SearchPage = () => {
   const location = useLocation();
@@ -61,7 +61,12 @@ const SearchPage = () => {
           moviesData = await tmdbAPI.searchMovies(searchQuery, currentPage);
         } else {
           // Show discover results with filters
-          const params = {
+          const params: {
+            page: number;
+            sort_by: string;
+            with_genres?: string;
+            primary_release_year?: number;
+          } = {
             page: currentPage,
             sort_by: sortBy,
           };
