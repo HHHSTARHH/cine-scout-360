@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Send, X } from 'lucide-react';
 import aiService from '../services/ai';
 import MovieCard from './MovieCard';
+import { posterSizes } from '../services/api';
 
 interface AIRecommendation {
   title: string;
@@ -43,8 +44,17 @@ const AIRecommendations = () => {
       console.error('Error getting AI recommendations:', error);
       setChatHistory(prev => [...prev, { 
         role: 'ai', 
-        content: 'Sorry, I encountered an error while processing your request. Please try again.' 
+        content: 'Sorry, I encountered an error while processing your request. But I can still show you some popular movies!' 
       }]);
+      
+      // If there's an error, we'll try to show trending movies instead
+      try {
+        const recommendationParams = { prompt: "popular movies this year" };
+        const results = await aiService.getRecommendations(recommendationParams);
+        setRecommendations(results);
+      } catch (fallbackError) {
+        console.error('Fallback recommendations also failed:', fallbackError);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -136,12 +146,21 @@ const AIRecommendations = () => {
                     <h4 className="text-sm font-medium text-gray-400 mb-3">RECOMMENDED MOVIES</h4>
                     <div className="grid grid-cols-2 gap-3">
                       {recommendations.map((movie, idx) => (
-                        <div key={idx} className="bg-white/5 rounded-lg p-3 hover:bg-white/10 transition-colors">
-                          <h5 className="font-medium">{movie.title}</h5>
-                          <p className="text-xs text-gray-400 mb-1">{movie.year} {movie.director ? `• ${movie.director}` : ''}</p>
-                          {movie.reason && (
-                            <p className="text-xs text-gray-300 mt-2 line-clamp-2">{movie.reason}</p>
+                        <div key={idx} className="bg-white/5 rounded-lg overflow-hidden hover:bg-white/10 transition-colors">
+                          {movie.poster_path && (
+                            <img 
+                              src={`${posterSizes.small}${movie.poster_path}`} 
+                              alt={movie.title}
+                              className="w-full h-48 object-cover"
+                            />
                           )}
+                          <div className="p-3">
+                            <h5 className="font-medium">{movie.title}</h5>
+                            <p className="text-xs text-gray-400 mb-1">{movie.year} {movie.director && movie.director !== 'Unknown' ? `• ${movie.director}` : ''}</p>
+                            {movie.reason && (
+                              <p className="text-xs text-gray-300 mt-2 line-clamp-2">{movie.reason}</p>
+                            )}
+                          </div>
                         </div>
                       ))}
                     </div>
