@@ -3,7 +3,7 @@ import axios from 'axios';
 
 // API key and URL constants
 export const GEMINI_API_KEY = 'AIzaSyAp_yEr9tolye093YPK934q8rTn6E2uMKY';
-export const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1';
+export const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta';
 
 // Create axios instance with the correct base URL and configuration
 export const aiClient = axios.create({
@@ -19,7 +19,7 @@ export const aiClient = axios.create({
 // Common function to make Gemini API requests
 export const makeGeminiRequest = async (prompt: string) => {
   try {
-    const response = await aiClient.post('/models/gemini-1.0-pro:generateContent', {
+    const response = await aiClient.post('/models/gemini-pro:generateContent', {
       contents: [
         {
           parts: [
